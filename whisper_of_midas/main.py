@@ -1,9 +1,19 @@
-import keyring
+from whisper_of_midas.credentials import Credentials
+from binance import Client, ThreadedWebsocketManager, ThreadedDepthCacheManager
+import pandas as pd
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
-def get_auth_tokens():
-    api_key = keyring.get_password('binance', 'api_key')
-    api_secret = keyring.get_password('binance', 'api_secret')
-    auth_tokens = {'api_key': api_key, 'api_secret': api_secret}
-    return auth_tokens
+def get_binance_client():
+    client = Client(binance_credentials['api_key'], binance_credentials['api_secret'])
+    return client
+
+def get_candlestick_data(symbol, interval, time_frame):
+    candlestick_data = client.get_historical_klines(symbol, interval, time_frame)
+    return candlestick_data
 
 if __name__ == '__main__':
+    credentials = Credentials()
+    binance_credentials = credentials.get_auth_tokens()
+    client = get_binance_client()
+    candlestick_data = get_candlestick_data("BTCUSDT",'1m', '1 day ago UTC')
