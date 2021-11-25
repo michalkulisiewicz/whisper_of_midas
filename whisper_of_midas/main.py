@@ -23,7 +23,7 @@ def convert_unix_timestamp(df):
     df['Close.time'] = pd.to_datetime(df['Close.time'], unit='ms')
     return df
 
-def create_candlestick_chart():
+def create_candlestick_chart(df):
     # # Create subplots and mention plot grid size
 
     fig = make_subplots(rows=2, cols=1, shared_xaxes=True,
@@ -31,8 +31,8 @@ def create_candlestick_chart():
                         row_width=[0.2, 0.7])
 
     # Plot OHLC on 1st row
-    fig.add_trace(go.Candlestick(x=df["Close.time"], open=df["Open"], high=df["High"],
-                                 low=df["Low"], close=df["Close"], name="OHLC"),
+    fig.add_trace(go.Candlestick(x=df['Close.time'], open=df['Open'], high=df['High'],
+                                 low=df['Low'], close=df['Close'], name='OHLC'),
                   row=1, col=1
                   )
 
@@ -47,7 +47,10 @@ if __name__ == '__main__':
     credentials = Credentials()
     binance_credentials = credentials.get_auth_tokens()
     client = get_binance_client()
-    candlestick_data = get_candlestick_data("BTCUSDT",'1m', '1 day ago UTC')
+    candlestick_data = get_candlestick_data('BTCUSDT','1m', '1 day ago UTC')
     df = parse_data_from_binance_to_data_frame(candlestick_data)
     df = convert_unix_timestamp(df)
+    fig = create_candlestick_chart(df)
+    fig.show()
+
 
