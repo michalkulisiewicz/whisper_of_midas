@@ -1,5 +1,5 @@
-from whisper_of_midas.credentials import Credentials
-from binance import Client, ThreadedWebsocketManager, ThreadedDepthCacheManager
+from credentials import Credentials
+from binance import Client
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -52,5 +52,4 @@ if __name__ == '__main__':
     df = convert_unix_timestamp(df)
     fig = create_candlestick_chart(df)
     fig.show()
-
 
