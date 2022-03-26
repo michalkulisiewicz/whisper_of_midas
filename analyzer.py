@@ -7,6 +7,7 @@ class analyzer():
         return self.df['Volume'].mean()
 
     def get_highest_vol(self):
-        return self.df['Valume'].max()
+        return self.df['Volume'].max()
 
-
+    def get_lowest_vol(self):
+        return self.df['Volume'].min()
