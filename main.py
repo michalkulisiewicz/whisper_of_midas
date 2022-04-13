@@ -3,6 +3,7 @@ from binance import Client
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+from analyzer import analyzer
 
 def get_binance_client():
     client = Client(binance_credentials['api_key'], binance_credentials['api_secret'])
@@ -13,14 +14,19 @@ def get_candlestick_data(symbol, interval, time_frame):
     return candlestick_data
 
 def parse_data_from_binance_to_data_frame(candlestick_data):
-    df = pd.DataFrame(candlestick_data, columns = ['Open.time', 'Open', 'High', 'Low', 'Close',
-                                                   'Volume', 'Close.time', 'Quote.asset.volume',
-                                                   'Number of trades', 'Taker.buy.base.asset.volume',
-                                                   'Taker.buy.quote.asset.volume', 'Ignore'])
+    df = pd.DataFrame(candlestick_data, columns = ['open_time', 'open', 'high', 'low', 'close',
+                                                   'volume', 'close_time', 'quote_asset_volume',
+                                                   'number_of_trades', 'taker_buy_base_asset_volume',
+                                                   'taker_buy_quote_asset_volume', 'ignore'])
     return df
 
+def drop_ignore_column(df):
+    df = df.drop('ignore', 1)
+    return df
+
+
 def convert_unix_timestamp(df):
-    df['Close.time'] = pd.to_datetime(df['Close.time'], unit='ms')
+    df['close_time'] = pd.to_datetime(df['close_time'], unit='ms')
     return df
 
 def create_candlestick_chart(df):
@@ -48,8 +54,17 @@ if __name__ == '__main__':
     binance_credentials = credentials.get_auth_tokens()
     client = get_binance_client()
     candlestick_data = get_candlestick_data('BTCUSDT','1m', '1 day ago UTC')
-    df = parse_data_from_binance_to_data_frame(candlestick_data)
-    df = convert_unix_timestamp(df)
-    fig = create_candlestick_chart(df)
-    fig.show()
+    analyzyer = analyzer(candlestick_data)
 
+
+    # df = parse_data_from_binance_to_data_frame(candlestick_data)
+    # df = drop_ignore_column(df)
+    # df = convert_unix_timestamp(df)
+
+    # fig = create_candlestick_chart(df)
+    # fig.show()
+    # df['volume'] = pd.to_numeric(df['volume'], downcast="float")
+    # df.columns = [x.strip().replace('.', '_') for x in df.columns]
+    # print(df['Volume'].dtype)
+    # ret = analyzyer.calc_mean_vol()
+    # print(ret)
