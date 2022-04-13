@@ -1,13 +1,10 @@
+from candlestick import candlestick
 class analyzer():
-    def __init__(self, df, num_of_candlesticks=30):
+    def __init__(self, candlestick_data, num_of_candlesticks=30):
+        self.candlestick_data = candlestick_data
         self.num_of_candlesticks = num_of_candlesticks
-        self.df = df[:num_of_candlesticks]
+        self._candlesticks(candlestick_data)
 
-    def get_mean_vol(self):
-        return self.df['Volume'].mean()
-
-    def get_highest_vol(self):
-        return self.df['Volume'].max()
-
-    def get_lowest_vol(self):
-        return self.df['Volume'].min()
+    def _candlesticks(self, candlestick_data):
+        candlesticks_data = candlestick_data[:self.num_of_candlesticks]
+        print(candlesticks_data)
