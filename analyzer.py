@@ -34,3 +34,7 @@ class analyzer():
         df = self.df.loc[self.df['direction'] == 'upbar']
         return df
 
+    def _get_downbar_dataframe(self):
+        df = self.df.loc[self.df['direction'] == 'downbar']
+        return df
+
