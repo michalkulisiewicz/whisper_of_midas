@@ -54,17 +54,21 @@ if __name__ == '__main__':
     binance_credentials = credentials.get_auth_tokens()
     client = get_binance_client()
     candlestick_data = get_candlestick_data('BTCUSDT','1m', '1 day ago UTC')
-    analyzyer = analyzer(candlestick_data)
+    candlestick_data = candlestick_data[:50]
+    df = parse_data_from_binance_to_data_frame(candlestick_data)
+    df = drop_ignore_column(df)
+    df = convert_unix_timestamp(df)
+    df['volume'] = pd.to_numeric(df['volume'], downcast="float")
+    df.columns = [x.strip().replace('.', '_') for x in df.columns]
+    print(len(df.index))
+    analyzer = analyzer(df)
 
 
-    # df = parse_data_from_binance_to_data_frame(candlestick_data)
-    # df = drop_ignore_column(df)
-    # df = convert_unix_timestamp(df)
+
 
     # fig = create_candlestick_chart(df)
     # fig.show()
-    # df['volume'] = pd.to_numeric(df['volume'], downcast="float")
-    # df.columns = [x.strip().replace('.', '_') for x in df.columns]
+
     # print(df['Volume'].dtype)
     # ret = analyzyer.calc_mean_vol()
     # print(ret)
