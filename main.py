@@ -81,17 +81,22 @@ def replace_dot_to_underscore(df):
     df.columns = [x.strip().replace('.', '_') for x in df.columns]
     return df
 
+def parse_dataframe(candlestick_data):
+    df = parse_data_from_binance_to_data_frame(candlestick_data)
+    df = drop_unnecessary_columns(df)
+    df = convert_unix_timestamp(df)
+    df = convert_col_to_float(df)
+    df = replace_dot_to_underscore(df)
+    return df
+
+
 if __name__ == '__main__':
     credentials = Credentials()
     binance_credentials = credentials.get_auth_tokens()
     client = get_binance_client()
     candlestick_data = get_candlestick_data('BTCUSDT','1m', '1 day ago UTC')
     candlestick_data = candlestick_data[:50]
-    df = parse_data_from_binance_to_data_frame(candlestick_data)
-    df = drop_unnecessary_columns(df)
-    df = convert_unix_timestamp(df)
-    df = convert_col_to_float(df)
-    df = replace_dot_to_underscore(df)
+    df = parse_dataframe(candlestick_data)
     print(df)
     # analyzer = analyzer(df)
 
