@@ -70,6 +70,10 @@ def test(df):
     print('Data type of each column of Dataframe :')
     print(dataTypeSeries)
 
+def convert_col_to_float(df):
+    df = df.astype({'open': 'float64', 'high': 'float64', 'low': 'float64',
+                    'close': 'float64', 'volume': 'float64'})
+    return df
 
 if __name__ == '__main__':
     credentials = Credentials()
@@ -80,8 +84,8 @@ if __name__ == '__main__':
     df = parse_data_from_binance_to_data_frame(candlestick_data)
     df = drop_unnecessary_columns(df)
     df = convert_unix_timestamp(df)
-    df['volume'] = pd.to_numeric(df['volume'], downcast="float")
     df.columns = [x.strip().replace('.', '_') for x in df.columns]
+    df = convert_col_to_float(df)
     test(df)
     # analyzer = analyzer(df)
 
