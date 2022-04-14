@@ -41,3 +41,7 @@ class analyzer():
     def _get_upbar_volume(self, upbar_df):
         return upbar_df['volume'].sum()
 
+    def _get_downbar_volume(self, downbar_df):
+        return downbar_df['volume'].sum()
+
+
