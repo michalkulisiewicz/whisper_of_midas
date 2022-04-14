@@ -49,6 +49,13 @@ def create_candlestick_chart(df):
     fig.update(layout_xaxis_rangeslider_visible=False)
     return fig
 
+def save_df_to_csv(df):
+    df.to_csv('sample.csv')
+
+def read_df_from_csv():
+    return pd.read_csv('sample.csv')
+
+
 if __name__ == '__main__':
     credentials = Credentials()
     binance_credentials = credentials.get_auth_tokens()
@@ -60,7 +67,6 @@ if __name__ == '__main__':
     df = convert_unix_timestamp(df)
     df['volume'] = pd.to_numeric(df['volume'], downcast="float")
     df.columns = [x.strip().replace('.', '_') for x in df.columns]
-    print(len(df.index))
     analyzer = analyzer(df)
 
 
