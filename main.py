@@ -20,8 +20,10 @@ def parse_data_from_binance_to_data_frame(candlestick_data):
                                                    'taker_buy_quote_asset_volume', 'ignore'])
     return df
 
-def drop_ignore_column(df):
-    df = df.drop('ignore', 1)
+def drop_unnecessary_columns(df):
+    df = df.drop(['quote_asset_volume', 'number_of_trades',
+                  'taker_buy_base_asset_volume', 'taker_buy_quote_asset_volume',
+                  'ignore'], axis=1)
     return df
 
 
@@ -63,7 +65,7 @@ if __name__ == '__main__':
     candlestick_data = get_candlestick_data('BTCUSDT','1m', '1 day ago UTC')
     candlestick_data = candlestick_data[:50]
     df = parse_data_from_binance_to_data_frame(candlestick_data)
-    df = drop_ignore_column(df)
+    df = drop_unnecessary_columns(df)
     df = convert_unix_timestamp(df)
     df['volume'] = pd.to_numeric(df['volume'], downcast="float")
     df.columns = [x.strip().replace('.', '_') for x in df.columns]
