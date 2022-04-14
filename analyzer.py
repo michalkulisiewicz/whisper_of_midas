@@ -38,3 +38,6 @@ class analyzer():
         df = self.df.loc[self.df['direction'] == 'downbar']
         return df
 
+    def _get_upbar_volume(self, upbar_df):
+        return upbar_df['volume'].sum()
+
