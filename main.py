@@ -28,7 +28,12 @@ def drop_unnecessary_columns(df):
 
 
 def convert_unix_timestamp(df):
+    #Converts unix timestamp to date_time, this is temporary function
+    #used only for readability during tests
+    #TODO Delete on production
+
     df['close_time'] = pd.to_datetime(df['close_time'], unit='ms')
+    df['open_time'] = pd.to_datetime(df['open_time'], unit='ms')
     return df
 
 def create_candlestick_chart(df):
@@ -57,6 +62,14 @@ def save_df_to_csv(df):
 def read_df_from_csv():
     return pd.read_csv('sample.csv')
 
+def test(df):
+    # Get a Series object containing the data type objects of each column of Dataframe.
+    # Index of series is column name.
+    dataTypeSeries = df.dtypes
+    print(df)
+    print('Data type of each column of Dataframe :')
+    print(dataTypeSeries)
+
 
 if __name__ == '__main__':
     credentials = Credentials()
@@ -69,7 +82,8 @@ if __name__ == '__main__':
     df = convert_unix_timestamp(df)
     df['volume'] = pd.to_numeric(df['volume'], downcast="float")
     df.columns = [x.strip().replace('.', '_') for x in df.columns]
-    analyzer = analyzer(df)
+    test(df)
+    # analyzer = analyzer(df)
 
 
 
