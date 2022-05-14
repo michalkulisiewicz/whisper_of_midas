@@ -24,6 +24,9 @@ class analyzer():
     def _get_lower_wick_upbar_value(self, open, low):
         return open - low
 
+    def _get_upper_wick_downbar_value(self, high, open):
+        return high - open
+
     def _get_candlestick_direction(self):
         #TODO instead of only getting direction, get wicks aswell
         for index, row in self.df.iterrows():
