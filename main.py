@@ -31,7 +31,6 @@ def convert_unix_timestamp(df):
     #Converts unix timestamp to date_time, this is temporary function
     #used only for readability during tests
     #TODO Delete on production
-
     df['close_time'] = pd.to_datetime(df['close_time'], unit='ms')
     df['open_time'] = pd.to_datetime(df['open_time'], unit='ms')
     return df
@@ -44,13 +43,14 @@ def create_candlestick_chart(df):
                         row_width=[0.2, 0.7])
 
     # Plot OHLC on 1st row
-    fig.add_trace(go.Candlestick(x=df['Close.time'], open=df['Open'], high=df['High'],
-                                 low=df['Low'], close=df['Close'], name='OHLC'),
+    fig.add_trace(go.Candlestick(x=df['close_time'], open=df['open'], high=df['high'],
+                                 low=df['low'], close=df['close'], customdata=df['volume'],
+                                 name='OHLC'),
                   row=1, col=1
                   )
 
     # Bar trace for volumes on 2nd row without legend
-    fig.add_trace(go.Bar(x=df['Close.time'], y=df['Volume'].astype(float).round(12), showlegend=False), row=2, col=1)
+    fig.add_trace(go.Bar(x=df['close_time'], y=df['volume'].astype(float).round(12), showlegend=True), row=2, col=1)
 
     # Do not show OHLC's rangeslider plot
     fig.update(layout_xaxis_rangeslider_visible=False)
@@ -91,17 +91,16 @@ def parse_dataframe(candlestick_data):
 
 
 if __name__ == '__main__':
-    credentials = Credentials()
-    binance_credentials = credentials.get_auth_tokens()
-    client = get_binance_client()
-    candlestick_data = get_candlestick_data('BTCUSDT','1m', '1 day ago UTC')
-    candlestick_data = candlestick_data[:50]
-    df = parse_dataframe(candlestick_data)
-    print(df)
-    # analyzer = analyzer(df)
+    # credentials = Credentials()
+    # binance_credentials = credentials.get_auth_tokens()
+    # client = get_binance_client()
+    # candlestick_data = get_candlestick_data('BTCUSDT','1m', '1 day ago UTC')
+    # candlestick_data = candlestick_data[:50]
+    # df = parse_dataframe(candlestick_data)
+    # save_df_to_csv(df)
+    df = read_df_from_csv()
 
-
-
+    analyzer = analyzer(df)
 
     # fig = create_candlestick_chart(df)
     # fig.show()
