@@ -36,6 +36,9 @@ class analyzer():
     def _get_downbar_body_value(self, close, open):
         return open - close
 
+    def _set_candlestick_direction(self, index, direction):
+        self.df.loc[index, 'direction'] = direction
+
     def _get_candlestick_direction(self):
         #TODO instead of only getting direction, get wicks aswell
         for index, row in self.df.iterrows():
