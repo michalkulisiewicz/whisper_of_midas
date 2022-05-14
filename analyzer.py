@@ -18,15 +18,32 @@ class analyzer():
     def _percentage(self, part, whole):
         return 100 * float(part) / float(whole)
 
+    def _get_upper_wick_upbar_value(self, high, close):
+        return high - close
 
     def _get_candlestick_direction(self):
+        #TODO instead of only getting direction, get wicks aswell
         for index, row in self.df.iterrows():
             open = self.df.iloc[index]['open']
             close = self.df.iloc[index]['close']
+            high = self.df.iloc[index]['open']
+            low = self.df.iloc[index]['low']
+            upbar_body_value = self._get_upbar_body_value(close, open)
+            downbar_body_value = self._get_downbar_body_value(close, open)
+
             if open < close:
-                self.df.loc[index, 'direction'] = 'upbar'
+                self._set_candlestick_direction(index, 'upbar')
+                upper_wick_value = self._get_upper_wick_upbar_value(high, close)
+                lower_wick_value = self._get_lower_wick_upbar_value(open, low)
+
+                self._set_candlestick_wick(index, 'upper_wick', upper_wick_value)
+                self._set_candlestick_wick(index, 'lower_wick', lower_wick_value)
+                self._set_candlestick_body(index, upbar_body_value)
+                print('dupa')
+
+
             elif open == close:
-                self.df.loc[index, 'direction'] = 'nonebar'
+                self.df.loc[index, 'direction'] = 'empty'
             else:
                 self.df.loc[index, 'direction'] = 'downbar'
 
@@ -43,5 +60,3 @@ class analyzer():
 
     def _get_downbar_volume(self, downbar_df):
         return downbar_df['volume'].sum()
-
-
