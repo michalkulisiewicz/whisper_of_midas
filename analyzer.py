@@ -39,6 +39,12 @@ class analyzer():
     def _set_candlestick_direction(self, index, direction):
         self.df.loc[index, 'direction'] = direction
 
+    def _set_candlestick_wick(self, index, wick_type, value):
+        if wick_type == 'upper_wick':
+            self.df.loc[index, 'upper_wick'] = value
+        elif wick_type == 'lower_wick':
+            self.df.loc[index, 'lower_wick'] = value
+
     def _get_candlestick_direction(self):
         #TODO instead of only getting direction, get wicks aswell
         for index, row in self.df.iterrows():
